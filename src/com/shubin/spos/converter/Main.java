@@ -10,10 +10,18 @@ public class Main extends Application {
 
     @Override
     public void start(Stage primaryStage) throws Exception{
-        Parent root = FXMLLoader.load(getClass().getResource("layout.fxml"));
+
+        FXMLLoader fxmlLoader = new FXMLLoader();
+        fxmlLoader.setLocation(getClass().getResource("layout.fxml"));
+
+        Parent root = fxmlLoader.load();
+        Controller controller = fxmlLoader.getController();
+
         primaryStage.setTitle("JRC SPOS Converter");
         primaryStage.setScene(new Scene(root));
         primaryStage.show();
+
+
     }
 
 
