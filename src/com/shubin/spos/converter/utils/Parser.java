@@ -1,5 +1,6 @@
 package com.shubin.spos.converter.utils;
 
+import com.shubin.spos.converter.Model.Route;
 import com.shubin.spos.converter.Model.Waypoint;
 
 import java.io.BufferedReader;
@@ -7,35 +8,31 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 public class Parser {
-    public static List<Waypoint> parseWaypoints(File file) {
+    public static Route parseRoute(File file) {
         List<Waypoint> waypoints = new ArrayList<>();
         try (BufferedReader in = new BufferedReader(new FileReader(file))) {
             String line = "";
 
             while((line =  in.readLine()) != null) {
-                waypoints.add(parseWaypoint(line));
+                if (!isComment(line)) {
+                    waypoints.add(parseWaypoint(line));
+                }
             }
-            // remove nulls
-            waypoints.removeAll(Collections.singleton(null));
-            return waypoints;
+            String name = stripExtension(file.getName());
+            return new Route(name, waypoints);
 
         } catch (IOException e) {
             e.printStackTrace();
         }
-        return waypoints;
+        return null;
     }
 
     private static Waypoint parseWaypoint(String line) {
-        if (isComment(line)) {
-            return null;
-        } else {
-            String[] data = line.split(",");
-            return convertDataToWaypoint(data);
-        }
+        String[] data = line.split(",");
+        return convertDataToWaypoint(data);
     }
 
     private static Waypoint convertDataToWaypoint(String[] data) {
@@ -61,6 +58,15 @@ public class Parser {
 
     private static boolean isComment(String line) {
         return line.startsWith("//");
+    }
+
+    private static String stripExtension(String fileName) {
+        if (fileName == null) return null;
+
+        int pos = fileName.lastIndexOf(".");
+        if (pos == -1) return fileName;
+
+        return fileName.substring(0, pos);
     }
 
 }

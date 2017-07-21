@@ -1,5 +1,6 @@
 package com.shubin.spos.converter.utils;
 
+import com.shubin.spos.converter.Model.Route;
 import com.shubin.spos.converter.Model.Waypoint;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -8,20 +9,19 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.Transformer;
-import javax.xml.transform.TransformerConfigurationException;
 import javax.xml.transform.TransformerException;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 import java.io.File;
-import java.util.List;
+import java.time.Instant;
 
 public class SPOSXMLWriter {
 
     public SPOSXMLWriter() {
     }
 
-    public void write(List<Waypoint> waypoints, File file) {
+    public void write(Route route, File file) {
         try {
             DocumentBuilderFactory docFactory = DocumentBuilderFactory.newInstance();
             DocumentBuilder docBuilder = docFactory.newDocumentBuilder();
@@ -37,15 +37,15 @@ public class SPOSXMLWriter {
 
             // template
             Element template = doc.createElement("template");
-//            template.setAttribute("name", "");
-//            template.setAttribute("created", "");
+            template.setAttribute("name", route.getName());
+            template.setAttribute("created", getWriteDate());
             sposroutetemplate.appendChild(template);
 
             // waypoints container
             Element waypointsElement = doc.createElement("waypoints");
             template.appendChild(waypointsElement);
 
-            for (Waypoint waypoint : waypoints) {
+            for (Waypoint waypoint : route.getWaypoints()) {
                 Element waypointElement = doc.createElement("waypoint");
                 waypointElement.setAttribute("name", waypoint.getName());
                 waypointElement.setAttribute("lat", Double.toString(waypoint.getLatitude()));
@@ -68,12 +68,12 @@ public class SPOSXMLWriter {
 
             transformer.transform(source, result);
 
-        }   catch (ParserConfigurationException e) {
-            e.printStackTrace();
-        } catch (TransformerConfigurationException e) {
-            e.printStackTrace();
-        } catch (TransformerException e) {
+        }   catch (ParserConfigurationException | TransformerException e) {
             e.printStackTrace();
         }
+    }
+
+    private String getWriteDate() {
+        return Instant.now().toString();
     }
 }

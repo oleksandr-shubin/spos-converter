@@ -1,6 +1,6 @@
 package com.shubin.spos.converter.Controller;
 
-import com.shubin.spos.converter.Model.Waypoint;
+import com.shubin.spos.converter.Model.Route;
 import com.shubin.spos.converter.utils.Parser;
 import com.shubin.spos.converter.utils.SPOSXMLWriter;
 import javafx.event.ActionEvent;
@@ -8,12 +8,11 @@ import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
 import java.io.File;
-import java.util.List;
 
 public class Controller {
 
     private Stage stage;
-    private List<Waypoint> waypoints;
+    private Route route;
 
     public Stage getStage() {
         return stage;
@@ -24,10 +23,11 @@ public class Controller {
     }
 
     public void actionUpload(ActionEvent actionEvent) {
+
         FileChooser fileChooser = createOpenFileChooser();
         File file = fileChooser.showOpenDialog(stage);
         if (file != null) {
-            waypoints = Parser.parseWaypoints(file);
+            route = Parser.parseRoute(file);
         }
     }
 
@@ -35,7 +35,7 @@ public class Controller {
         FileChooser fileChooser = createSaveFileChooser();
         File file = fileChooser.showSaveDialog(stage);
         SPOSXMLWriter writer = new SPOSXMLWriter();
-        writer.write(waypoints, file);
+        writer.write(route, file);
     }
 
     private FileChooser createOpenFileChooser() {
