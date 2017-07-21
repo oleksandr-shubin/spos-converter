@@ -1,5 +1,6 @@
 package com.shubin.spos.converter;
 
+import com.shubin.spos.converter.Controller.Controller;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -12,7 +13,7 @@ public class Main extends Application {
     public void start(Stage primaryStage) throws Exception{
 
         FXMLLoader fxmlLoader = new FXMLLoader();
-        fxmlLoader.setLocation(getClass().getResource("layout.fxml"));
+        fxmlLoader.setLocation(getClass().getResource("View/layout.fxml"));
 
         Parent root = fxmlLoader.load();
         Controller controller = fxmlLoader.getController();
