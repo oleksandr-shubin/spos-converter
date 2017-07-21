@@ -30,7 +30,8 @@ public class SPOSXMLWriter {
 
             // root
             Element sposroutetemplate = doc.createElement("sposroutetemplate");
-            sposroutetemplate.setAttribute("xmlns:xsi", "http://www.w3.org/2001/XMLSchema-instance\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema");
+            sposroutetemplate.setAttribute("xmlns:xsi", "http://www.w3.org/2001/XMLSchema-instance");
+            sposroutetemplate.setAttribute("xmlns:xsd", "http://www.w3.org/2001/XMLSchema");
             sposroutetemplate.setAttribute("xmlVersion", "1");
             sposroutetemplate.setAttribute("xmlns", "http://www.meteogroup-maritime.com/spos/routetemplate");
             doc.appendChild(sposroutetemplate);
