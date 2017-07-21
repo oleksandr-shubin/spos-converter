@@ -7,7 +7,7 @@ public class Waypoint {
     private String delay = "PT0S";
     private int speed = 0;
     private boolean useSpeed = false;
-    private String tracktype = "Rhubmline";
+    private String tracktype = "RhumbLine";
     private String routeTemplatePointType = "Fixed";
     private boolean ignoreLand = false;
 
