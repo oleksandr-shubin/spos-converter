@@ -4,12 +4,20 @@ import com.shubin.spos.converter.Model.Route;
 import com.shubin.spos.converter.utils.Parser;
 import com.shubin.spos.converter.utils.SPOSXMLWriter;
 import javafx.event.ActionEvent;
+import javafx.fxml.FXML;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
 import java.io.File;
 
 public class Controller {
+
+    @FXML
+    private Label statusLabel;
+    @FXML
+    private Button saveButton;
 
     private Stage stage;
     private Route route;
@@ -23,17 +31,26 @@ public class Controller {
     }
 
     public void actionUpload(ActionEvent actionEvent) {
-
         FileChooser fileChooser = createOpenFileChooser();
         File file = fileChooser.showOpenDialog(stage);
-        if (file != null) {
-            route = Parser.parseRoute(file);
+
+        if (file == null) {
+            return;
         }
+
+        route = Parser.parseRoute(file);
+        printSuccessStatus("Route \"" + route.getName() + "\" successfully converted. You may now save it");
+        saveButton.setManaged(true);
     }
 
     public void actionSave(ActionEvent actionEvent) {
         FileChooser fileChooser = createSaveFileChooser();
         File file = fileChooser.showSaveDialog(stage);
+
+        if (file == null) {
+            return;
+        }
+
         SPOSXMLWriter writer = new SPOSXMLWriter();
         writer.write(route, file);
     }
@@ -58,5 +75,11 @@ public class Controller {
                 new File(System.getProperty("user.home"))
         );
         return fileChooser;
+    }
+
+    private void printSuccessStatus(String text) {
+        statusLabel.setText(text);
+        statusLabel.setManaged(true);
+        statusLabel.setStyle("-fx-text-fill: green");
     }
 }

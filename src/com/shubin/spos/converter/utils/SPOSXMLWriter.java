@@ -17,64 +17,70 @@ import java.io.File;
 import java.time.Instant;
 
 public class SPOSXMLWriter {
-
-    public SPOSXMLWriter() {
-    }
+    private final String XMLNS_XSI = "http://www.w3.org/2001/XMLSchema-instance";
+    private final String XMLNS_XSD = "http://www.w3.org/2001/XMLSchema";
+    private final String XML_VERSION = "1";
+    private final String XMLNS = "http://www.meteogroup-maritime.com/spos/routetemplate";
 
     public void write(Route route, File file) {
         try {
-            DocumentBuilderFactory docFactory = DocumentBuilderFactory.newInstance();
-            DocumentBuilder docBuilder = docFactory.newDocumentBuilder();
-
-            Document doc = docBuilder.newDocument();
-
-            // root
-            Element sposroutetemplate = doc.createElement("sposroutetemplate");
-            sposroutetemplate.setAttribute("xmlns:xsi", "http://www.w3.org/2001/XMLSchema-instance");
-            sposroutetemplate.setAttribute("xmlns:xsd", "http://www.w3.org/2001/XMLSchema");
-            sposroutetemplate.setAttribute("xmlVersion", "1");
-            sposroutetemplate.setAttribute("xmlns", "http://www.meteogroup-maritime.com/spos/routetemplate");
-            doc.appendChild(sposroutetemplate);
-
-            // template
-            Element template = doc.createElement("template");
-            template.setAttribute("name", route.getName());
-            template.setAttribute("created", getWriteDate());
-            sposroutetemplate.appendChild(template);
-
-            // waypoints container
-            Element waypointsElement = doc.createElement("waypoints");
-            template.appendChild(waypointsElement);
-
-            for (Waypoint waypoint : route.getWaypoints()) {
-                Element waypointElement = doc.createElement("waypoint");
-                waypointElement.setAttribute("name", waypoint.getName());
-                waypointElement.setAttribute("lat", Double.toString(waypoint.getLatitude()));
-                waypointElement.setAttribute("lon", Double.toString(waypoint.getLongitude()));
-                waypointElement.setAttribute("delay", waypoint.getDelay());
-                waypointElement.setAttribute("speed", Integer.toString(waypoint.getSpeed()));
-                waypointElement.setAttribute("useSpeed", Boolean.toString(waypoint.isUseSpeed()));
-                waypointElement.setAttribute("tracktype", waypoint.getTracktype());
-                waypointElement.setAttribute("routeTemplatePointType", waypoint.getRouteTemplatePointType());
-                waypointElement.setAttribute("ignoreLand", Boolean.toString(waypoint.isIgnoreLand()));
-                waypointsElement.appendChild(waypointElement);
-            }
+            Document doc = createRouteXMLDoc(route);
 
             // write into file
             TransformerFactory transformerFactory = TransformerFactory.newInstance();
             Transformer transformer = transformerFactory.newTransformer();
             DOMSource source = new DOMSource(doc);
             StreamResult result = new StreamResult(file);
-//            StreamResult result = new StreamResult(System.out);
 
             transformer.transform(source, result);
 
-        }   catch (ParserConfigurationException | TransformerException e) {
+        }   catch (TransformerException | ParserConfigurationException e) {
             e.printStackTrace();
         }
     }
 
     private String getWriteDate() {
         return Instant.now().toString();
+    }
+
+    private Document createRouteXMLDoc(Route route) throws ParserConfigurationException {
+        DocumentBuilderFactory docFactory = DocumentBuilderFactory.newInstance();
+        DocumentBuilder docBuilder = docFactory.newDocumentBuilder();
+
+        Document doc = docBuilder.newDocument();
+
+        // root
+        Element sposroutetemplate = doc.createElement("sposroutetemplate");
+        sposroutetemplate.setAttribute("xmlns:xsi", XMLNS_XSI);
+        sposroutetemplate.setAttribute("xmlns:xsd", XMLNS_XSD);
+        sposroutetemplate.setAttribute("xmlVersion", XML_VERSION);
+        sposroutetemplate.setAttribute("xmlns", XMLNS);
+        doc.appendChild(sposroutetemplate);
+
+        // template
+        Element template = doc.createElement("template");
+        template.setAttribute("name", route.getName());
+        template.setAttribute("created", getWriteDate());
+        sposroutetemplate.appendChild(template);
+
+        // waypoints container
+        Element waypointsElement = doc.createElement("waypoints");
+        template.appendChild(waypointsElement);
+
+        for (Waypoint waypoint : route.getWaypoints()) {
+            Element waypointElement = doc.createElement("waypoint");
+            waypointElement.setAttribute("name", waypoint.getName());
+            waypointElement.setAttribute("lat", Double.toString(waypoint.getLatitude()));
+            waypointElement.setAttribute("lon", Double.toString(waypoint.getLongitude()));
+            waypointElement.setAttribute("delay", waypoint.getDelay());
+            waypointElement.setAttribute("speed", Integer.toString(waypoint.getSpeed()));
+            waypointElement.setAttribute("useSpeed", Boolean.toString(waypoint.isUseSpeed()));
+            waypointElement.setAttribute("tracktype", waypoint.getTracktype());
+            waypointElement.setAttribute("routeTemplatePointType", waypoint.getRouteTemplatePointType());
+            waypointElement.setAttribute("ignoreLand", Boolean.toString(waypoint.isIgnoreLand()));
+            waypointsElement.appendChild(waypointElement);
+        }
+
+        return doc;
     }
 }

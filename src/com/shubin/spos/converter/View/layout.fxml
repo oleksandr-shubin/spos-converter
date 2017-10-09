@@ -7,12 +7,11 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity"
-      prefHeight="480.0" prefWidth="320.0" xmlns="http://javafx.com/javafx/8.0.112" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.shubin.spos.converter.Controller.Controller">
+<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="480.0" prefWidth="320.0" xmlns="http://javafx.com/javafx/8.0.112" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.shubin.spos.converter.Controller.Controller">
    <children>
       <VBox alignment="CENTER" prefHeight="480.0" prefWidth="320.0">
          <children>
-            <Label text="Вiтаю, шановний пане Володимир">
+            <Label prefWidth="255.0" text="Welcome to JRC - SPOS converter">
                <font>
                   <Font size="14.0" />
                </font>
@@ -20,12 +19,17 @@
                   <Insets bottom="40.0" />
                </VBox.margin>
             </Label>
-            <Button mnemonicParsing="false" prefWidth="190.0" text="Upload JRC CSV route file" onAction="#actionUpload">
+            <Button mnemonicParsing="false" onAction="#actionUpload" prefWidth="255.0" text="Open JRC CSV route-file">
                <VBox.margin>
                   <Insets bottom="40.0" />
                </VBox.margin>
             </Button>
-            <Button mnemonicParsing="false" prefWidth="190.0" text="Save as SPOS route file" onAction="#actionSave">
+            <Label fx:id="statusLabel" managed="false" prefWidth="255.0" wrapText="true">
+               <VBox.margin>
+                  <Insets bottom="40.0" />
+               </VBox.margin>
+            </Label>
+            <Button fx:id="saveButton" managed="false" mnemonicParsing="false" onAction="#actionSave" prefWidth="255.0" text="Save as SPOS route-file">
                <VBox.margin>
                   <Insets bottom="40.0" />
                </VBox.margin>

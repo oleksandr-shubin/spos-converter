@@ -8,6 +8,7 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 
 public class Main extends Application {
+    private static final String TITLE = "JRC SPOS Converter";
 
     @Override
     public void start(Stage primaryStage) throws Exception{
@@ -18,7 +19,7 @@ public class Main extends Application {
         Parent root = fxmlLoader.load();
         Controller controller = fxmlLoader.getController();
 
-        primaryStage.setTitle("JRC SPOS Converter");
+        primaryStage.setTitle(TITLE);
         primaryStage.setScene(new Scene(root));
         primaryStage.show();
 
