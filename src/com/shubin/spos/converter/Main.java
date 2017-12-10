@@ -18,8 +18,12 @@ public class Main extends Application {
 
         Parent root = fxmlLoader.load();
         Controller controller = fxmlLoader.getController();
+        controller.setStage(primaryStage);
 
         primaryStage.setTitle(TITLE);
+        primaryStage.setWidth(320);
+        primaryStage.setHeight(480);
+        primaryStage.setResizable(false);
         primaryStage.setScene(new Scene(root));
         primaryStage.show();
 

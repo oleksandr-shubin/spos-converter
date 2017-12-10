@@ -5,12 +5,17 @@ import com.shubin.spos.converter.utils.Parser;
 import com.shubin.spos.converter.utils.SPOSXMLWriter;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.stage.FileChooser;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 import java.io.File;
+import java.io.IOException;
 
 public class Controller {
 
@@ -20,6 +25,7 @@ public class Controller {
     private Button saveButton;
 
     private Stage stage;
+    private Stage aboutStage;
     private Route route;
 
     public Stage getStage() {
@@ -81,5 +87,29 @@ public class Controller {
         statusLabel.setText(text);
         statusLabel.setManaged(true);
         statusLabel.setStyle("-fx-text-fill: green");
+    }
+
+    public void actionShowAbout(ActionEvent actionEvent) {
+        try {
+            if (aboutStage == null) {
+                aboutStage = new Stage();
+                Parent root = FXMLLoader.load(getClass().getResource("../View/about.fxml"));
+                aboutStage.setTitle("About");
+//                aboutStage.setMinHeight(320);
+//                aboutStage.setMinWidth(320);
+                aboutStage.setResizable(false);
+                aboutStage.setScene(new Scene(root));
+                aboutStage.initModality(Modality.WINDOW_MODAL);
+                if (this.stage != null) {
+                    aboutStage.initOwner(this.stage);
+                } else {
+                    return;
+                }
+            }
+
+            aboutStage.show();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }
